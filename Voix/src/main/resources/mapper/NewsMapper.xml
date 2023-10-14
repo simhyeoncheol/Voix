@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Voix.Dao.NewsDao">
+	<select id="selectNews_map">
+		SELECT NWCODE, NWTITLE, NWCONTENT, NWIMG, NWBIGHIT, TO_CHAR(NWDATE,'YYYY-MM-DD') AS NWDATE  FROM NEWS ORDER BY NWDATE DESC
+	</select>
+	
+	<select id="getNwInfo">
+		SELECT * FROM NEWS WHERE NWCODE = #{nwcode}
+	</select>
+	
+	<select id="selectMaxReCode">
+		SELECT NVL(MAX(RECODE), 'RE0000') FROM REVIEWS
+	</select>
+	
+	<insert id="newsRegistReview">
+		INSERT INTO REVIEWS(RECODE,REWRITER,RECONTENT,REDATE,RESTATE) VALUES(#{recode},#{rewriter},#{recontent},SYSDATE,#{restate})
+	</insert>
+	
+	<select id="selectReviewList" resultType="hashmap">
+		SELECT * FROM REVIEWS WHERE RESTATE = #{nwcode}
+	</select>
+	
+	<delete id="deleteNewsReview">
+		DELETE FROM REVIEWS WHERE RECODE = #{recode}
+	</delete>
+	<insert id="likeNews">
+   		INSERT INTO LIKES (LIMID, LILIST)
+    	VALUES (#{mid}, #{like})
+	</insert>
+</mapper>

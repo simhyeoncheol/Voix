@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Voix.Dao.MemberDao">
+	<select id="selectMemberInfo_mapper">
+		SELECT * FROM MEMBERS WHERE MID = #{inputId}
+	</select>
+
+	<insert id="getinsertMemberJoin_comm">
+		INSERT INTO MEMBERS
+		VALUES(#{mid}, #{mpw} , #{mname}, #{maddr}, #{memail}, #{mimg}, 'YC')
+	</insert>
+
+	<select id="selectemailId">
+		SELECT * FROM MEMBERS
+		WHERE MID = #{inputId} AND MEMAIL = #{email}
+	</select>
+
+	<select id="FindId">
+		SELECT MID FROM MEMBERS WHERE MEMAIL = #{email}
+	</select>
+
+	<update id="updatePassword">
+		UPDATE MEMBERS SET MPW = #{mpw}
+		WHERE MID = #{mid}
+	</update>
+
+	<select id="loginMember">
+		SELECT * FROM MEMBERS WHERE MID = #{mid} AND MPW = #{inputPw}
+	</select>
+
+	<select id="selectMemberInfo" resultType="com.Voix.Dto.Member">
+		SELECT * FROM MEMBERS WHERE MID = #{id}
+	</select>
+
+	<insert id="insertMember_kakao">
+		INSERT INTO MEMBERS(MID, MPW, MNAME, MADDR ,MEMAIL, MIMG, MSTATE) VALUES(#{mid}, 'kakaoAccount', #{mname}, '미입력', #{memail}, #{mimg}, 'YK')
+	</insert>
+
+	<select id="newsLikeList" resultType="hashmap">
+		SELECT *
+		FROM NEWS N
+		INNER JOIN LIKES L
+		ON N.NWCODE = L.LILIST
+		WHERE LIMID = #{loginId}
+	</select>
+
+	<select id="albumsLikeList" resultType="hashmap">
+		SELECT *
+		FROM ALBUMS A
+		INNER JOIN LIKES L
+		ON A.ALCODE = L.LILIST
+		WHERE LIMID = #{loginId}
+	</select>
+
+	<select id="ticketsLikeList" resultType="hashmap">
+		SELECT *
+		FROM TICKETS T
+		INNER JOIN LIKES L
+		ON T.TKCODE = L.LILIST
+		WHERE LIMID = #{loginId}
+	</select>
+
+	<select id="songsLikeList" resultType="hashmap">
+		SELECT *
+		FROM SONGS S
+		INNER JOIN LIKES L
+		ON S.SGCODE = L.LILIST
+		WHERE LIMID = #{loginId}
+	</select>
+
+	<update id="updateMemberInfo">
+		UPDATE MEMBERS SET MNAME = #{mname}, MADDR = #{maddr}, MEMAIL = #{memail}, MIMG = #{mimg} WHERE MID = #{mid}
+	</update>
+</mapper>

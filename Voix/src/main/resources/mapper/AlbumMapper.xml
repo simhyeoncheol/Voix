@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Voix.Dao.AlbumDao">
+	<select id="selectAlbum_map">
+	SELECT  ALIMG, ALTITLE, ALARTIST, TO_CHAR(ALDATE,'YYYY-MM-DD') AS ALDATE, ALGENRE
+	 FROM ALBUMS GROUP BY ALTITLE, ALIMG, ALARTIST,ALDATE, ALGENRE ORDER BY ALDATE DESC
+	</select>
+	
+	<select id="selectAlbumInfo_map">
+	SELECT ALCODE, ALIMG, ALTITLE, ALPRICE, ALSALEPRICE, ALARTIST, TO_CHAR(ALDATE,'YYYY-MM-DD') AS ALDATE, ALINFO, ALGENRE, ALSCORE, ALLIST, ALSITE
+	 FROM ALBUMS WHERE ALTITLE = #{altitle} ORDER BY ALDATE DESC
+	</select>
+	<select id="selectMaxCaCode">
+	SELECT NVL(MAX(CACODE), 'C0000') FROM CARTS
+	</select>
+	<insert id="insertCart">
+	INSERT INTO CARTS VALUES(#{cacode},#{camid},#{caalcode},#{caqty})
+	
+	</insert>
+	<select id="selectCartList">
+	SELECT C.CACODE, C.CAQTY, A.ALPRICE, A.ALSALEPRICE, A.ALIMG, A.ALSITE
+	FROM CARTS C INNER JOIN ALBUMS A ON C.CAALCODE = A.ALCODE
+	WHERE C.CAMID = #{loginId}
+	</select>
+</mapper>
