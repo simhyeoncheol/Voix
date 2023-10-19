@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Voix.Dao.MemberDao">
+	<select id="selectMemberInfo_mapper">
+		SELECT * FROM MEMBERS WHERE MID = #{inputId}
+	</select>
+
+	<insert id="getinsertMemberJoin_comm">
+		INSERT INTO MEMBERS(MID,MPW, MNAME, MADDR ,MEMAIL ,MSTATE)
+		VALUES(#{mid}, #{mpw} , #{mname}, #{maddr},#{memail},'YC')
+	</insert>
+</mapper>
