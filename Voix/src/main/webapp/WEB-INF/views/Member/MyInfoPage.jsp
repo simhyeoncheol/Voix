@@ -46,11 +46,11 @@
 								<c:choose>
 									<c:when test="${sessionScope.loginProfile == null}">
 										<%-- 등록된 프로필이 없는 경우 --%>
-										<img style="width: 170px; height: 150px;" class="img-profile" src="${pageContext.request.contextPath}/resources/users/me/images.png" alt="일반 프로필1">
+										<img style="width: 170px; height: 150px;" class="img-profile" src="${pageContext.request.contextPath}/resources/users/memberProfile/기본프로필.jpg" alt="일반 프로필1">
 									</c:when>
 									<c:otherwise>
 										<%-- 등록된 프로필이 있는 경우 --%>
-										<img style="width: 170px; height: 150px;" class="img-profile" src="${pageContext.request.contextPath}/resources/users/me/${sessionScope.loginProfile}" alt="일반 프로필2">
+										<img style="width: 170px; height: 150px;" class="img-profile" src="${pageContext.request.contextPath}/resources/users/memberProfile/${sessionScope.loginProfile}" alt="일반 프로필2">
 									</c:otherwise>
 								</c:choose>
 							</c:when>
@@ -60,14 +60,12 @@
 							</c:otherwise>
 						</c:choose>
 
-						<%-- <img alt="" src="${mInfo.mimg}" style="width: 170px; height: 150px;"> --%>
-
 
 						<div class="col mb-2">
 							<p class="mb-1">이름: ${mInfo.mname}</p>
 							<p class="mb-1">이메일: ${mInfo.memail}</p>
 							<p class="mb-3">주소: ${mInfo.maddr}</p>
-							<a class="btn btn-danger" href="/MyInfoUpdate">내정보변경하기</a>
+							<a class="btn btn-danger" href="#" onclick="PwCheck()">내정보변경하기</a>
 						</div>
 
 
@@ -78,123 +76,337 @@
 
 					<div class="row">
 						<div class="col" style="text-align: center;">
-							<a href="#">구매내역(링크)</a>
+							<a class="btn" onclick="OrberClick()">구매내역</a>
 						</div>
-						<div class="col" style="text-align: center;">찜목록</div>
-						<div class="col" style="text-align: center;">내가쓴 댓글</div>
+						<div class="col" style="text-align: center;">
+							<a class="btn" onclick="LickClick()">찜목록</a>
+						</div>
+						<div class="col" style="text-align: center;">
+							<a class="btn" onclick="CommentClick()">내가쓴 댓글 목록</a>
+						</div>
 					</div>
 
 					<br>
 					<hr>
-
-					<div class="card mb-4">
-						<div class="NewsDiv" style="display: flex;">
-
+					<div id="LickList" style="display: none;">
+						<div>뉴스</div>
+						<div class="card mb-4">
 							<c:forEach items="${newsLikeList}" var="news">
-								<div class="NewsImg">
-									<a href="#뉴스코드"><img style="width: 350px; height: 200px;" src="${news.NWIMG}" alt="..." /></a>
+								<div class="NewsDiv" style="display: flex;">
+									<div class="NewsImg">
+										<a href="#뉴스코드">
+											<img style="width: 350px; height: 200px;" src="${news.NWIMG}" alt="..." />
+										</a>
+									</div>
+									<div class="NewsText" style="flex: 1;">
+										<div class="NewsTitle">
+											<h4>${news.NWTITLE}</h4>
+										</div>
+										<div class="NewsContents p-2">
+											<p class="card-text">${news.NWCONTENT}</p>
+										</div>
+										<div class="small text-mute m-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
+											<a href="찜">
+												<img alt="" src="/resources/assets/heart.png">
+											</a>
+											<a class="Views" style="text-decoration-line: none; color: gray;">조회수:${news.NWBIGHIT }</a>
+										</div>
+									</div>
 								</div>
-								<div class="NewsText" style="flex: 1;">
-									<div class="NewsTitle">
+								<hr>
+							</c:forEach>
+						</div>
 
+						<div>블로그</div>
+						<div class="card mb-4">
+							<c:forEach items="${blogLikeList}" var="blog">
+								<div class="blogDiv" style="display: flex;">
+									<div class="blogImg">
+										<a href="#블로그코드">
+											<img style="width: 350px; height: 200px;" src="${blog.BGIMG}" alt="..." />
+										</a>
+									</div>
+									<div class="BlogText" style="flex: 1;">
+										<div class="Blogtitle">
+											<h4>${blog.BGTITLE}</h4>
+										</div>
+										<div class="BlogContents p-2">
+											<p class="card-text">${blog.BGCONTENT}</p>
+										</div>
+										<div class="small text-mute m-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
+											<a href="찜">
+												<img alt="" src="/resources/assets/heart.png">
+											</a>
+											<a class="Views" style="text-decoration-line: none; color: gray;">조회수:${blog.BGBIGHIT }</a>
+										</div>
+									</div>
+								</div>
+								<hr>
+							</c:forEach>
+						</div>
+
+						<div>앨범</div>
+						<div>
+							<div class="card mb-4">
+								<div class="AlbumDiv" style="display: flex;">
+									<c:forEach items="${albumsLikeList}" var="albums">
+										<div class="AlbumImg">
+											<a href="#앨범코드">
+												<img class="" style="width: 350px; height: 200px;" src="${albums.ALIMG}" alt="..." />
+											</a>
+										</div>
+										<div class="NewsText" style="flex: 1;">
+											<div class="AlbumTitle">
+												<h4 class="card-title m-2">${albums.ALTITLE}</h4>
+											</div>
+											<div class="AlbumContentsWrapper">
+												<div class="AlbumText p-2 d-flex" style="justify-content: space-between;">
+													<p class="card-text">${albums.ALARTIST}</p>
+													<p class="card-text">${albums.ALINFO}</p>
+												</div>
+											</div>
+											<div class="small m-2 d-flex" style="justify-content: space-between;">
+												<p class="text-mute">${albums.ALPRICE}원</p>
+												<a href="찜" class="">
+													<img alt="" src="/resources/assets/heart.png">
+												</a>
+											</div>
+										</div>
+										<hr>
+									</c:forEach>
+								</div>
+							</div>
+						</div>
+
+						<div>랭킹</div>
+						<div>
+							<div class="card mb-4">
+								<div class="NewsDiv" style="display: flex;">
+
+									<c:forEach items="${songsLikeList}" var="songs">
+										<div class="NewsImg">
+											<a href="#뉴스코드">
+												<img style="width: 350px; height: 200px;" src="${songs.SGIMG}" alt="..." />
+											</a>
+										</div>
+										<div class="NewsText" style="flex: 1;">
+											<div class="NewsTitle">
+
+												<h4>${songs.SGARTIST}</h4>
+											</div>
+											<div class="NewsContents p-2">
+												<p class="card-text">${songs.SGINFO}</p>
+											</div>
+											<div class="small text-mute m-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
+												<a href="찜">
+													<img alt="" src="/resources/assets/heart.png">
+												</a>
+												<a class="Views" style="text-decoration-line: none; color: gray;"></a>
+											</div>
+										</div>
+										<hr>
+									</c:forEach>
+
+
+								</div>
+							</div>
+						</div>
+
+						<div>티켓</div>
+						<div>
+							<div class="card mb-4">
+								<div class="TicketDiv" style="display: flex;">
+									<c:forEach items="${ticketsLikeList}" var="tickets">
+										<div class="TicketImg">
+											<a href="#티켓코드">
+												<img class="" src="${tickets.TKIMG}" alt="..." />
+											</a>
+										</div>
+										<div class="TicketContents w-100">
+											<div class="TicketTitle">
+												<h2 class="card-title m-2">${tickets.TKARTIST}</h2>
+											</div>
+											<div class="TicketContentsWrapper">
+												<div class="TicketText p-2 d-flex" style="justify-content: space-between;">
+													<p class="card-text">${tickets.TKINFO}</p>
+													<p class="card-text small"></p>
+												</div>
+											</div>
+											<div class="small text-mute m-2" style="text-align: end;">
+												<a href="찜" class="">
+													<img alt="" src="/resources/assets/heart.png">
+												</a>
+											</div>
+										</div>
+										<hr>
+									</c:forEach>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div id="CommentList" style="display: none;">
+						<div>뉴스</div>
+						<div class="card mb-4">
+							<c:forEach items="${newsReviewList}" var="news">
+								<div class="NewsImg">
+									<a href="#뉴스코드">
+										<img class="" style="width: 350px; height: 200px;" src="${news.NWIMG}" alt="..." />
+									</a>
+								</div>
+								<div class="NewsDiv" style="display: flex;">
+									<div class="NewsText" style="flex: 1;">
 										<h4>${news.NWTITLE}</h4>
-									</div>
-									<div class="NewsContents p-2">
-										<p class="card-text">${news.NWCONTENT}</p>
-									</div>
-									<div class="small text-mute m-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
-										<a href="찜"><img alt="" src="/resources/assets/heart.png"></a> <a class="Views" style="text-decoration-line: none; color: gray;">조회수:${news.NWBIGHIT }</a>
+										<div class="NewsTitle">
+											<h4>${news.REWRITER}</h4>
+										</div>
+										<div class="NewsContents p-2">
+											<p class="card-text">${news.RECONTENT}</p>
+										</div>
+										<div class="small text-mute m-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
+											<a class="Views" style="text-decoration-line: none; color: gray;">${news.REDATE }</a>
+										</div>
 									</div>
 								</div>
-
+								<hr>
 							</c:forEach>
-
-
 						</div>
-					</div>
-					<a>블로그에서 만든 형식(해야함 디비가 안들어가 해줘)</a>
-				</div>
-				<div>
-					<div class="card mb-4">
-						<div class="AlbumDiv" style="display: flex;">
-							<c:forEach items="${albumsLikeList}" var="albums">
+
+						<div>블로그</div>
+						<div class="card mb-4">
+							<c:forEach items="${blogReviewList}" var="blog">
+								<div class="BlogImg">
+									<a href="#뉴스코드">
+										<img class="" style="width: 350px; height: 200px;" src="${blog.BGIMG}" alt="..." />
+									</a>
+								</div>
+								<div class="NewsDiv" style="display: flex;">
+									<div class="NewsText" style="flex: 1;">
+										<h4>${blog.BGTITLE }</h4>
+										<div class="NewsTitle">
+											<h4>${blog.REWRITER}</h4>
+										</div>
+										<div class="NewsContents p-2">
+											<p class="card-text">${blog.RECONTENT}</p>
+										</div>
+										<div class="small text-mute m-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
+											<a class="Views" style="text-decoration-line: none; color: gray;">${blog.REDATE }</a>
+										</div>
+									</div>
+								</div>
+								<hr>
+							</c:forEach>
+						</div>
+
+						<div>앨범</div>
+						<div class="card mb-4">
+							<c:forEach items="${albumsReviewList}" var="album">
 								<div class="AlbumImg">
-									<a href="#앨범코드"><img class="" style="width: 350px; height: 200px;" src="${albums.ALIMG}" alt="..." /></a>
+									<a href="#뉴스코드">
+										<img class="" style="width: 350px; height: 200px;" src="${album.ALIMG}" alt="..." />
+									</a>
 								</div>
-								<div class="NewsText" style="flex: 1;">
-									<div class="AlbumTitle">
-										<h4 class="card-title m-2">${albums.ALTITLE}</h4>
-									</div>
-									<div class="AlbumContentsWrapper">
-										<div class="AlbumText p-2 d-flex" style="justify-content: space-between;">
-											<p class="card-text">${albums.ALARTIST}</p>
-											<p class="card-text">${albums.ALINFO}</p>
+								<div class="NewsDiv" style="display: flex;">
+									<div class="NewsText" style="flex: 1;">
+										<h4>${album.ALTITLE}</h4>
+										<div class="NewsTitle">
+											<h4>${album.REWRITER}</h4>
+										</div>
+										<div class="NewsContents p-2">
+											<p class="card-text">${album.RECONTENT}</p>
+										</div>
+										<div class="small text-mute m-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
+											<a class="Views" style="text-decoration-line: none; color: gray;">${album.REDATE }</a>
 										</div>
 									</div>
-									<div class="small m-2 d-flex" style="justify-content: space-between;">
-										<p class="text-mute">${albums.ALPRICE}원</p>
-										<a href="찜" class=""><img alt="" src="/resources/assets/heart.png"></a>
-									</div>
 								</div>
+								<hr>
 							</c:forEach>
 						</div>
-					</div>
-				</div>
-				<div>
-					<div class="card mb-4">
-						<div class="NewsDiv" style="display: flex;">
 
-							<c:forEach items="${songsLikeList}" var="songs">
-								<div class="NewsImg">
-									<a href="#뉴스코드"><img style="width: 350px; height: 200px;" src="${songs.SGIMG}" alt="..." /></a>
-								</div>
-								<div class="NewsText" style="flex: 1;">
-									<div class="NewsTitle">
-
-										<h4>${songs.SGARTIST}</h4>
-									</div>
-									<div class="NewsContents p-2">
-										<p class="card-text">${songs.SGINFO}</p>
-									</div>
-									<div class="small text-mute m-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
-										<a href="찜"><img alt="" src="/resources/assets/heart.png"></a> <a class="Views" style="text-decoration-line: none; color: gray;"></a>
-									</div>
-								</div>
-
-							</c:forEach>
-
-
-						</div>
-					</div>
-				</div>
-				<div>
-					<div class="card mb-4">
-						<div class="TicketDiv" style="display: flex;">
-							<c:forEach items="${ticketsLikeList}" var="tickets">
+						<div>티켓</div>
+						<div class="card mb-4">
+							<c:forEach items="${ticketReviewList}" var="ticket">
 								<div class="TicketImg">
-									<a href="#티켓코드"><img class="" src="${tickets.TKIMG}" alt="..." /></a>
+									<a href="#뉴스코드">
+										<img class="" style="width: 350px; height: 200px;" src="${ticket.TKIMG}" alt="..." />
+									</a>
 								</div>
-								<div class="TicketContents w-100">
-									<div class="TicketTitle">
-										<h2 class="card-title m-2">${tickets.TKARTIST}</h2>
-									</div>
-									<div class="TicketContentsWrapper">
-										<div class="TicketText p-2 d-flex" style="justify-content: space-between;">
-											<p class="card-text">${tickets.TKINFO}</p>
-											<p class="card-text small"></p>
+								<div class="NewsDiv" style="display: flex;">
+									<div class="NewsText" style="flex: 1;">
+										<h4>${ticket.TKTITLE}</h4>
+										<div class="NewsTitle">
+											<h4>${ticket.REWRITER}</h4>
+										</div>
+										<div class="NewsContents p-2">
+											<p class="card-text">${ticket.RECONTENT}</p>
+										</div>
+										<div class="small text-mute m-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
+											<a class="Views" style="text-decoration-line: none; color: gray;">${ticket.REDATE }</a>
 										</div>
 									</div>
-									<div class="small text-mute m-2" style="text-align: end;">
-										<a href="찜" class=""><img alt="" src="/resources/assets/heart.png"></a>
+								</div>
+								<hr>
+							</c:forEach>
+						</div>
+
+						<div>랭킹</div>
+						<div class="card mb-4">
+							<c:forEach items="${songsReviewList}" var="song">
+								<div class="SongsImg">
+									<a href="#뉴스코드">
+										<img class="" style="width: 350px; height: 200px;" src="${song.SGIMG}" alt="..." />
+									</a>
+								</div>
+								<div class="NewsDiv" style="display: flex;">
+									<div class="NewsText" style="flex: 1;">
+										<h4>${song.SGTITLE}</h4>
+										<div class="NewsTitle">
+											<h4>${song.REWRITER}</h4>
+										</div>
+										<div class="NewsContents p-2">
+											<p class="card-text">${song.RECONTENT}</p>
+										</div>
+										<div class="small text-mute m-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
+											<a class="Views" style="text-decoration-line: none; color: gray;">${song.REDATE }</a>
+										</div>
 									</div>
 								</div>
+								<hr>
+							</c:forEach>
+						</div>
+
+					</div>
+
+					<div id="OrderList" style="display: none;">
+						<div>구매내역</div>
+						<div class="card mb-4">
+							<c:forEach items="${AlbumOrderList}" var="order">
+								<div class="NewsDiv" style="display: flex; height: 200px; overflow: hidden;">
+									<div class="NewsImg">
+										<a href="#뉴스코드">
+											<img style="width: 350px; height: 200px;" src="${order.ALIMG}" alt="..." />
+										</a>
+									</div>
+									<div class="NewsText" style="flex: 1;">
+										<div class="NewsTitle">
+											<h4>${order.ALTITLE}</h4>
+										</div>
+										<div class="NewsContents p-2">
+											<p class="card-text">${order.ODQTY}</p>
+											<p class="card-text">${order.ODPRICE}</p>
+											<p class="card-text">${order.ODADDR}</p>
+											<p class="card-text">${order.ODDATE}</p>
+										</div>
+									</div>
+								</div>
+								<hr>
 							</c:forEach>
 						</div>
 					</div>
+
 				</div>
-
-				<div></div>
-
 			</div>
 		</div>
 	</div>
@@ -213,5 +425,39 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- Core theme JS-->
 	<script src="js/scripts.js"></script>
+	<script>
+		let loginPw = '<c:out value="${sessionScope.loginPw}" />'; // 세션에서 비밀번호 가져오기
+		function PwCheck() {
+			console.log('호출성공');
+			let pw = prompt('비밀번호를 입력해주세요.'); // 변수 이름을 'pw'로 수정
+			if (pw === loginPw) {
+				window.location.href = "/MyInfoUpdate";
+			} else {
+				alert('비밀번호가 일치하지 않습니다. 다시 시도해주세요');
+			}
+		}
+	</script>
+	<script>
+		function OrberClick() {
+			// '구매내역' 클릭 시 실행할 동작
+			document.getElementById('OrderList').style.display = 'block';
+			document.getElementById('LickList').style.display = 'none';
+			document.getElementById('CommentList').style.display = 'none';
+		}
+
+		function LickClick() {
+			// '찜목록' 클릭 시 실행할 동작
+			document.getElementById('OrderList').style.display = 'none';
+			document.getElementById('LickList').style.display = 'block';
+			document.getElementById('CommentList').style.display = 'none';
+		}
+
+		function CommentClick() {
+			// '내가쓴 댓글 목록' 클릭 시 실행할 동작
+			document.getElementById('OrderList').style.display = 'none';
+			document.getElementById('LickList').style.display = 'none';
+			document.getElementById('CommentList').style.display = 'block';
+		}
+	</script>
 </body>
 </html>

@@ -12,4 +12,5 @@ public class Ticket {
 	private String tktime;
 	private String tkinfo;
 	private String tktitle;
+	private String tkurl;
 }

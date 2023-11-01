@@ -107,6 +107,14 @@ input[name="Code"] {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 }
+
+input[type=file]::file-selector-button{
+	background-color: #5e504e;
+	border: 1px solid #5e504e;
+	border-radius: 10px;
+	color: #ede9e7;
+	padding: 10px;
+}
 </style>
 </head>
 <body>
@@ -115,13 +123,13 @@ input[name="Code"] {
 
 		<!-- 컨텐츠 시작 -->
 		<div class="card mb-4 mx-auto" style="width: 500px;">
-			<div class="card-body">
-				<div>회원가입</div>
+			<div class="card-body VOIXBODERLINE">
+				<div style="font-size: 24px; font-weight: bold; color: #5e504e; justify-content: center; text-align: center;">회원가입</div>
 				<form action="${pageContext.request.contextPath}/Join" method="post" enctype="multipart/form-data" onsubmit="return formCheck(this)">
 					<div>
-						<input placeholder="아이디" class="formInput p-1" type="text" name="Id" id="inputId">
-						<button type="button" class="IdCheck" onclick="checkId(this)">중복확인</button>
-						<p class="checkMsg mb-2" id="idMsg">중복확인</p>
+						<input placeholder="아이디" class="formInput p-1" type="text" name="Id" id="inputId" style="width: 75%; margin-bottom: 0px;">
+						<button type="button" class="IdCheck" onclick="checkId(this)" style="width: 20% ;background-color: #5e504e ; font-size: 13px;" >중복확인</button>
+						<p class="checkMsg mb-2" id="idMsg" >중복확인</p>
 						<input placeholder="비밀번호" class="formInput p-1" type="text" name="RePw">
 						<input placeholder="비밀번호 확인" class="formInput p-1" type="text" name="CkPw">
 					</div>
@@ -129,13 +137,13 @@ input[name="Code"] {
 					<div>
 						<input placeholder="이름" class="formInput p-1" type="text" name="Name">
 						<img id="preview" style="width: 70px; height: 70px;" alt="">
-						<input id="fileInput" class="formInput p-1" type="file" name="mfile" placeholder="프로필 입력">
+						<input id="fileInput" class="formInput p-1" type="file" name="mfile" placeholder="프로필 입력" style="border: none; width: 82%;">
 					</div>
 
 
 					<div>
-						<input placeholder="주소" class="formInput p-1" type="text" id="Address" name="Address">
-						<button type="button" class="mb-2" onclick="PostCode()">주소찾기</button>
+						<input placeholder="주소" class="formInput p-1" type="text" id="Address" name="Address" style="width: 75%;">
+						<button type="button" class="mb-2 VOIXBODERLINE" onclick="PostCode()" style="background-color: #5e504e; border-radius: 10px;" >주소찾기</button>
 						<input placeholder="상세주소" class="formInput p-1" type="text" id="DetailAddress" name="DetailAddress">
 					</div>
 					<div>
@@ -144,7 +152,7 @@ input[name="Code"] {
 							<input type="text" name="memailId" id="inputEmailId" placeholder="이메일아이디">
 							@
 							<input type="text" name="memailDomain" id="inputDomain" placeholder="이메일도메인">
-							<select onchange="domainSelect(this)">
+							<select onchange="domainSelect(this)" style="width: 75%;">
 								<option value="">직접입력</option>
 								<option value="naver.com">naver.com</option>
 								<option value="gmail.com">gmail.com</option>
@@ -157,15 +165,15 @@ input[name="Code"] {
 									/*document.querySelector("#inputDomain").value = selObj.value;*/
 								}
 							</script>
-							<button type="button" onclick="gomailCheck()">보내기</button>
+							<button type="button" class="VOIXBODERLINE" onclick="gomailCheck()" style="background-color: #5e504e; border-radius: 10px; width: 23%; margin-left: 5px;">보내기</button>
 						</div>
 						<div>
-							<input type="text" name="Code" id="mail-check-input" placeholder="인증번호">
-							<button type="button" class="mb-2" onclick="mailCheck()">확인</button>
+							<input type="text" name="Code" id="mail-check-input" placeholder="인증번호" style="width: 75%;">
+							<button type="button" class="mb-2 VOIXBODERLINE" onclick="mailCheck()" style="background-color: #5e504e; border-radius: 10px; width: 22%;">확인</button>
 							<span id="mail-check-warn"></span>
 						</div>
+							<button type="submit" class="VOIXBODERLINE" style="background-color: #5e504e; border-radius: 10px; width: 99% !important;">회원가입하기</button>
 
-						<button type="submit">회원가입하기</button>
 					</div>
 				</form>
 			</div>

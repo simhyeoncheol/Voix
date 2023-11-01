@@ -72,7 +72,72 @@
 		WHERE LIMID = #{loginId}
 	</select>
 
+	<select id="blogLikeList" resultType="hashmap">
+		SELECT *
+		FROM BLOGS B
+		INNER JOIN LIKES L
+		ON B.BGCODE = L.LILIST
+		WHERE LIMID = #{loginId}
+	</select>
+	
+
 	<update id="updateMemberInfo">
 		UPDATE MEMBERS SET MNAME = #{mname}, MADDR = #{maddr}, MEMAIL = #{memail}, MIMG = #{mimg} WHERE MID = #{mid}
 	</update>
+	
+	<insert id="insertNaverLogin">
+		INSERT INTO MEMBERS
+		VALUES(#{mid}, '1111' , #{mname}, '', #{memail}, #{mimg}, 'YN')
+	</insert>
+	<select id="selectOrderInfo">
+		SELECT AB.ALIMG, AB.ALCODE, AB.ALTITLE, OD.ODQTY, OD.ODCODE,
+		 	OD.ODPRICE, TO_CHAR(OD.ODDATE,'YYYY-MM-DD HH24:MI') AS ODDATE, OD.ODADDR
+		FROM ORDERS OD INNER JOIN ALBUMS AB
+		ON OD.ODALCODE = AB.ALCODE
+		WHERE OD.ODMID = #{mid}
+		ORDER BY ODDATE DESC
+	</select>
+	<select id="newsReviewList" resultType="hashmap">
+		SELECT *
+		FROM NEWS N
+		INNER JOIN REVIEWS R
+		ON N.NWCODE = R.RESTATE
+		WHERE REWRITER = #{loginId}
+	</select>
+		<select id="blogReviewList" resultType="hashmap">
+		SELECT *
+		FROM BLOGS B
+		INNER JOIN REVIEWS R
+		ON B.BGCODE = R.RESTATE
+		WHERE REWRITER = #{loginId}
+	</select>
+		<select id="albumsReviewList" resultType="hashmap">
+		SELECT *
+		FROM ALBUMS A
+		INNER JOIN REVIEWS R
+		ON A.ALCODE = R.RESTATE
+		WHERE REWRITER = #{loginId}
+	</select>
+		<select id="ticketReviewList" resultType="hashmap">
+		SELECT *
+		FROM TICKETS T
+		INNER JOIN REVIEWS R
+		ON T.TKCODE = R.RESTATE
+		WHERE REWRITER = #{loginId}
+	</select>
+		<select id="songsReviewList" resultType="hashmap">
+		SELECT *
+		FROM SONGS S
+		INNER JOIN REVIEWS R
+		ON S.SGCODE = R.RESTATE
+		WHERE REWRITER = #{loginId}
+	</select>
+
+	<select id="AlbumOrderList" resultType="hashmap">
+		SELECT *
+		FROM  ALBUMS A
+		INNER JOIN ORDERS O
+		ON A.ALCODE = O.ODALCODE
+		WHERE ODMID = #{loginId}
+	</select>
 </mapper>

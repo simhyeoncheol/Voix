@@ -12,5 +12,6 @@
 		<mapper resource="mapper/NewsMapper.xml" />
 		<mapper resource="mapper/ChartMapper.xml" />
 		<mapper resource="mapper/AlbumMapper.xml" />
+		<mapper resource="mapper/BlogMapper.xml" />
 	</mappers>
 </configuration>

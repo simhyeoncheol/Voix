@@ -87,16 +87,16 @@
 										<div>
 											<%-- <img id="preview" style="width: 70px; height: 70px;" alt="" src="${mInfo.mimg}"> --%>
 
-											<c:choose>
+																<c:choose>
 												<c:when test="${sessionScope.loginState == 'YC'}">
 													<c:choose>
 														<c:when test="${sessionScope.loginProfile == null}">
 															<%-- 등록된 프로필이 없는 경우 --%>
-															<img id="preview" style="width: 70px; height: 70px;" class="img-profile" src="${pageContext.request.contextPath}/resources/users/me/images.png" alt="일반 프로필1">
+															<img id="preview" style="width: 70px; height: 70px;" class="img-profile" src="${pageContext.request.contextPath}/resources/users/memberProfile/기본프로필.jpg" alt="일반 프로필1">
 														</c:when>
 														<c:otherwise>
 															<%-- 등록된 프로필이 있는 경우 --%>
-															<img id="preview" style="width: 70px; height: 70px;" class="img-profile" src="${pageContext.request.contextPath}/resources/users/me/${sessionScope.loginProfile}" alt="일반 프로필2">
+															<img id="preview" style="width: 70px; height: 70px;" class="img-profile" src="${pageContext.request.contextPath}/resources/users/memberProfile/${sessionScope.loginProfile}" alt="일반 프로필2">
 														</c:otherwise>
 													</c:choose>
 												</c:when>

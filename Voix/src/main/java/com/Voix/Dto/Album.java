@@ -13,7 +13,8 @@ public class Album {
 	private String aldate;
 	private String alinfo;
 	private String algenre;
-	private String alscore;
+	private int alscore;
 	private String allist;
 	private String alsite;
+	int alqty;
 }

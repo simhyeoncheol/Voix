@@ -26,6 +26,8 @@ public interface MemberDao {
 	ArrayList<HashMap<String, String>> ticketsLikeList(String loginId);
 
 	ArrayList<HashMap<String, String>> songsLikeList(String loginId);
+	
+	ArrayList<HashMap<String, String>> blogLikeList(String loginId);
 
 	public Member loginMember(@Param("mid") String inputId, @Param("inputPw") String inputPw);
 
@@ -34,4 +36,20 @@ public interface MemberDao {
 	int insertMember_kakao(Member member);
 
 	int updateMemberInfo(Member member);
+
+	int insertNaverLogin(Member navergetInfo);
+
+	ArrayList<HashMap<String, String>> selectOrderInfo(String mid);
+
+	ArrayList<HashMap<String, String>> newsReviewList(String loginId);
+
+	ArrayList<HashMap<String, String>> blogReviewList(String loginId);
+
+	ArrayList<HashMap<String, String>> albumsReviewList(String loginId);
+
+	ArrayList<HashMap<String, String>> ticketReviewList(String loginId);
+
+	ArrayList<HashMap<String, String>> songsReviewList(String loginId);
+
+	ArrayList<HashMap<String, String>> AlbumOrderList(String loginId);
 }

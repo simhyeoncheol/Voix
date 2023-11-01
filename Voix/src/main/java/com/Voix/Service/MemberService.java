@@ -1,7 +1,12 @@
 package com.Voix.Service;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -20,6 +25,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.Voix.Dao.MemberDao;
 import com.Voix.Dto.Member;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Component
 @Service
@@ -94,7 +103,7 @@ public class MemberService {
 
 		MultipartFile mfile = mem.getMfile();
 		String mprofile = ""; // 파일명 저장할 변수
-		String savePath = session.getServletContext().getRealPath("/resources/users/me"); // 파일을 저장할 경로
+		String savePath = session.getServletContext().getRealPath("/resources/users/memberProfile"); // 파일을 저장할 경로
 
 		System.out.println(savePath);
 		System.out.println(mfile);
@@ -154,6 +163,11 @@ public class MemberService {
 	public ArrayList<HashMap<String, String>> songsLike(String loginId) {
 		return mdao.songsLikeList(loginId);
 	}
+	
+	public ArrayList<HashMap<String, String>> blogLike(String loginId) {
+		
+		return mdao.blogLikeList(loginId);
+	}
 
 	public Member memberInfo(String loginId) {
 		Member memInfo = mdao.selectMemberInfo(loginId);
@@ -169,7 +183,7 @@ public class MemberService {
 	}
 
 	// 카카오로그인
-	public Member getLoginMemberInfo_kakao(String id) {
+	public Member getLoginMemberInfo(String id) {
 		System.out.println("service - getLoginMemberInfo_kakao 호출");
 		return mdao.selectMemberInfo(id);
 	}
@@ -185,7 +199,7 @@ public class MemberService {
 
 		MultipartFile mfile = member.getMfile();
 		String mprofile = ""; // 파일명 저장할 변수
-		String savePath = session.getServletContext().getRealPath("/resources/users/me"); // 파일을 저장할 경로
+		String savePath = session.getServletContext().getRealPath("/resources/users/memberProfile"); // 파일을 저장할 경로
 
 		System.out.println(savePath);
 		System.out.println(mfile);
@@ -215,6 +229,124 @@ public class MemberService {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	public Member memberlogin_naver(String token) throws IOException {
+		System.out.println("SERVICE memberlogin_naver() 호출");
+		StringBuilder urlBuilder = new StringBuilder("https://openapi.naver.com/v1/nid/me"); /* URL */
+		URL url = new URL(urlBuilder.toString());
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("POST");
+		conn.setRequestProperty("Authorization", "Bearer "+token);
+		System.out.println("Response code: " + conn.getResponseCode());
+
+		if (conn.getResponseCode() != 200) {
+			return null;
+		}
+
+		BufferedReader rd;
+		if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		} else {
+			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+		}
+		StringBuilder sb = new StringBuilder();
+		String line;
+		while ((line = rd.readLine()) != null) {
+			sb.append(line);
+		}
+		rd.close();
+		conn.disconnect();
+		Gson gson = new Gson();
+		JsonElement json = JsonParser.parseString(sb.toString()).getAsJsonObject().get("response");
+		String id = gson.toJson(json.getAsJsonObject().get("id")).substring(0,10);
+		String profile_image = gson.toJson(json.getAsJsonObject().get("profile_image"));
+		String email = gson.toJson(json.getAsJsonObject().get("email"));
+		String name = gson.toJson(json.getAsJsonObject().get("name"));
+		Member mem = new Member();
+		mem.setMid(id);
+		mem.setMimg(profile_image);
+		mem.setMemail(email);
+		mem.setMname(name);
+		return mem;
+	}
+
+	public String getToken(String code, String state) throws IOException {
+		StringBuilder urlBuilder = new StringBuilder("https://nid.naver.com/oauth2.0/token"); /* URL */
+	urlBuilder.append("?" + URLEncoder.encode("grant_type", "UTF-8") + "=" + URLEncoder.encode("authorization_code", "UTF-8"));
+	urlBuilder.append("&" + URLEncoder.encode("client_id", "UTF-8") + "=" + URLEncoder.encode("uqIAhwBYmZxJrA3aR_ze", "UTF-8"));
+	urlBuilder.append("&" + URLEncoder.encode("client_secret", "UTF-8") + "=" + URLEncoder.encode("k8hZ8jGGZA", "UTF-8"));
+	urlBuilder.append("&" + URLEncoder.encode("code", "UTF-8") + "=" + URLEncoder.encode(code, "UTF-8"));
+	urlBuilder.append("&" + URLEncoder.encode("state", "UTF-8") + "=" + URLEncoder.encode(state, "UTF-8"));
+	
+
+	URL url = new URL(urlBuilder.toString());
+	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	conn.setRequestMethod("POST");
+	System.out.println("Response code: " + conn.getResponseCode());
+
+	if (conn.getResponseCode() != 200) {
+		return null;
+	}
+
+	BufferedReader rd;
+	if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+		rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	} else {
+		rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+	}
+	StringBuilder sb = new StringBuilder();
+	String line;
+	while ((line = rd.readLine()) != null) {
+		sb.append(line);
+	}
+	rd.close();
+	conn.disconnect();
+	JsonElement token = JsonParser.parseString(sb.toString()).getAsJsonObject().get("access_token");
+	Gson gson = new Gson();
+	return gson.toJson(token);
+	}
+
+	public int insertNaverLogin(Member navergetInfo) {
+		System.out.println("SERVICE insertNaverLogin");
+		
+		return mdao.insertNaverLogin(navergetInfo);
+	}
+	public ArrayList<HashMap<String, String>> getOrderInfo(String mid) {
+		System.out.println("SERVICE getOrderInfo");
+		
+		
+		return mdao.selectOrderInfo(mid);
+	}
+	
+	public ArrayList<HashMap<String, String>> newsReview(String loginId) {
+		// TODO Auto-generated method stub
+		return mdao.newsReviewList(loginId);
+	}
+
+	public ArrayList<HashMap<String, String>> blogReview(String loginId) {
+		// TODO Auto-generated method stub
+		return mdao.blogReviewList(loginId);
+	}
+
+	public ArrayList<HashMap<String, String>> albumsReview(String loginId) {
+		// TODO Auto-generated method stub
+		return mdao.albumsReviewList(loginId);
+	}
+
+	public ArrayList<HashMap<String, String>> ticketReview(String loginId) {
+		// TODO Auto-generated method stub
+		return mdao.ticketReviewList(loginId);
+	}
+
+	public ArrayList<HashMap<String, String>> songsReview(String loginId) {
+		// TODO Auto-generated method stub
+		return mdao.songsReviewList(loginId);
+	}
+
+	public ArrayList<HashMap<String, String>> AlbumOrderList(String loginId) {
+		
+		return mdao.AlbumOrderList(loginId);
 	}
 
 }

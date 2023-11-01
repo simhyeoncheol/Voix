@@ -110,5 +110,90 @@ public class TicketService {
 		System.out.println(result);
 		return result;
 	}
+	public ArrayList<HashMap<String, String>> selectTitle(String searchKeyword) {
+		ArrayList<HashMap<String, String>> searchList = new ArrayList<HashMap<String, String>>();
+		ArrayList<HashMap<String, String>> titleList = new ArrayList<HashMap<String, String>>();
+		ArrayList<HashMap<String, String>> contentList = new ArrayList<HashMap<String, String>>();
+			try {
+				titleList = tdao.selectSearch_Title(searchKeyword);				
+			} catch (Exception e) {
+			}
+			System.out.println(titleList);
+			try {
+				contentList = tdao.selectSearch_Content(searchKeyword);				
+			} catch (Exception e) {
+			}
+			searchList.addAll(titleList);
+			searchList.addAll(contentList);
+		return searchList;
+	}
+	public HashMap<String, String> selectMainTicket(String t) {
+		HashMap<String, String> result = tdao.selectMainTicket();
+		return result;
+	}
+	public int likeTicket(String like, String mid) {
+		System.out.println("SERVICE - 티켓 찜");
+		return tdao.likeTicket(like,mid);
+	}
+	public int getTicket_melon(Ticket tK) throws IOException {
+		System.out.println("SERVICE - getTicket_melon 호출");
+		return tdao.getTicket_melon(tK);
+	}
+
+	public String getMaxTkCode() {
+		return tdao.getMaxTkCode();
+	}
+
+	public int getTicket_Interticket(Ticket TK) {
+		// TODO Auto-generated method stub
+		return tdao.getTicket_Interticket(TK);
+	}
+
+	public int getTicket_Yes24ticket(Ticket TK) {
+		// TODO Auto-generated method stub
+		return tdao.getTicket_Yes24ticket(TK);
+	}
+
+	public int getTicket_11bungaTicket(Ticket TK) {
+		// TODO Auto-generated method stub
+		return tdao.getTicket_11bungaTicket(TK);
+	}
+
+	public ArrayList<HashMap<String, String>> getTicketList_ChooseSite(String siteVal) {
+		System.out.println("서비스 사이트선택");
+		return tdao.getTicketList_ChooseSite(siteVal);
+	}
+
+	public ArrayList<String> getLikedTicketList(String mid) {
+		System.out.println("SERVICE - 찜 조회");
+		return tdao.getLikedTicketList(mid);
+	}
+	
+	public int unlikeTicket(String like, String mid) {
+		System.out.println("SERVICE - 찜 취소");
+		return tdao.unlikeTicket(like,mid);
+	}
+
+	public ArrayList<HashMap<String, String>> selectTitle(String searchKeyword, String siteValue) {
+		System.out.println("ㅗ"+siteValue);
+		System.out.println("ㅗ"+searchKeyword);
+		ArrayList<HashMap<String, String>> searchList = new ArrayList<HashMap<String, String>>();
+		ArrayList<HashMap<String, String>> titleList = new ArrayList<HashMap<String, String>>();
+		ArrayList<HashMap<String, String>> contentList = new ArrayList<HashMap<String, String>>();
+			try {
+				titleList = tdao.selectSearch_TitleSite(searchKeyword,siteValue);				
+			} catch (Exception e) {
+			}
+			System.out.println(titleList);
+			try {
+				contentList = tdao.selectSearch_ContentSite(searchKeyword,siteValue);				
+			} catch (Exception e) {
+			}
+			searchList.addAll(titleList);
+			searchList.addAll(contentList);
+		return searchList;
+	}
+	
+
 
 }

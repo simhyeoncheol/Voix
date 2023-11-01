@@ -31,4 +31,112 @@
 		<select id="getTkTitle">
 		SELECT TKTITLE FROM TICKETS WHERE TKPLACE = #{tkplace}
 	</select>
+		<select id="selectSearch_Title">
+	SELECT * FROM TICKETS WHERE TKTITLE like '%${tktitle}%'
+	</select>
+	
+	<select id="selectSearch_Content">
+	SELECT * FROM TICKETS WHERE TKARTIST like '%${tkartist}%'
+	</select>
+
+	<select id="selectMainTicket">
+		SELECT *
+		FROM (SELECT TKCODE AS code, TKTITLE AS title , TKARTIST AS content , TKIMG AS img , TKDATE AS dat2
+		FROM TICKETS
+		ORDER BY TKDATE DESC)
+		WHERE ROWNUM = 1
+	</select>
+
+	<insert id="likeTicket">
+		INSERT INTO LIKES (LIMID, LILIST)
+		VALUES (#{mid}, #{like})
+	</insert>
+
+		<select id="getMaxTkCode">
+		SELECT NVL(MAX(TKCODE), 'T0000') FROM TICKETS
+	</select>
+	
+	<insert id="getTicket_melon">
+		INSERT INTO TICKETS(TKCODE, TKIMG, TKARTIST, TKDATE, TKPLACE, TKTIME, TKTITLE, TKURL, TKSTATE)
+		VALUES (#{tkcode},#{tkimg},#{tkartist},#{tkdate},#{tkplace},#{tktime},#{tktitle},#{tkurl},'M')
+	</insert>
+	
+	<insert id="getTicket_Interticket">
+		INSERT INTO TICKETS(TKCODE, TKIMG, TKARTIST,TKDATE, TKPLACE, TKTIME, TKTITLE, TKURL, TKSTATE)
+		VALUES (#{tkcode},#{tkimg},#{tkartist},#{tkdate},#{tkplace},#{tktime},#{tktitle},#{tkurl},'I')
+	</insert>
+	
+	<insert id="getTicket_Yes24ticket">
+		INSERT INTO TICKETS(TKCODE, TKIMG, TKDATE, TKPLACE, TKTIME, TKTITLE, TKURL, TKSTATE)
+		VALUES (#{tkcode},#{tkimg},#{tkdate},#{tkplace},#{tktime},#{tktitle},#{tkurl},'Y')
+	</insert>
+	
+	<insert id="getTicket_11bungaTicket">
+	INSERT INTO TICKETS(TKCODE, TKIMG, TKARTIST,TKDATE, TKPLACE, TKTIME, TKTITLE, TKURL, TKSTATE)
+		VALUES (#{tkcode},#{tkimg},#{tkartist},#{tkdate},#{tkplace},#{tktime},#{tktitle},#{tkurl},'B')
+	</insert>
+	
+	<select id="getTicketList_ChooseSite">
+	SELECT * FROM TICKETS WHERE TKSTATE =
+	<choose>
+	<when test="siteVal == 'melon'">
+		'M'
+	</when> 
+	<when test="siteVal == 'interpark'">
+		'I'
+	</when> 
+	<when test="siteVal == 'yes24'">
+		'Y'
+	</when> 
+	<when test="siteVal == '11bunga'">
+		'B'
+	</when> 
+	</choose>
+	ORDER BY TKDATE DESC
+	</select>
+
+	<select id="getLikedTicketList" resultType="String">
+    	SELECT LILIST FROM LIKES WHERE LIMID = #{mid}
+	</select>
+	
+	<delete id="unlikeTicket">
+	DELETE FROM LIKES
+	WHERE LIMID = #{mid}
+	AND LILIST = #{like}
+	</delete>
+	<select id="selectSearch_TitleSite">
+	SELECT * FROM TICKETS WHERE TKTITLE like '%${sk}%' AND TKSTATE =
+	<choose>
+	<when test="sv == 'melon'">
+		'M'
+	</when> 
+	<when test="sv == 'interpark'">
+		'I'
+	</when> 
+	<when test="sv == 'yes24'">
+		'Y'
+	</when> 
+	<when test="sv == '11bunga'">
+		'B'
+	</when> 
+	</choose>
+	</select>
+	<select id="selectSearch_ContentSite">
+	SELECT * FROM TICKETS WHERE TKCONTENT like '%${sk}%' AND TKSTATE =
+	<choose>
+	<when test="sv == 'melon'">
+		'M'
+	</when> 
+	<when test="sv == 'interpark'">
+		'I'
+	</when> 
+	<when test="sv == 'yes24'">
+		'Y'
+	</when> 
+	<when test="sv == '11bunga'">
+		'B'
+	</when> 
+	</choose>
+	</select>
+	
 </mapper>

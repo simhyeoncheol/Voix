@@ -16,6 +16,19 @@
 <link href="resources/css/styles.css" rel="stylesheet" />
 
 <style type="text/css">
+
+.Melon{
+	background:white !important;;
+}
+.Vibe{
+	background:black !important;;
+}
+.Bugs{
+	background:#ff3c28 !important;;
+}
+.Genie{
+	background:white !important;;	
+}
 </style>
 </head>
 
@@ -28,123 +41,36 @@
 	<!-- Responsive navbar-->
 	<!-- Page content-->
 	<div class="container">
-		<div class="row">
-			<div class="col-lg-8">
-
-				<div class="card mb-2">
-					<div class="card-body">
-						<div class="row">
-							<div class="card col-md-1">
-								<p>로고</p>
-							</div>
-
-							<div class="card col-md-8">
-								<p>정액권 설명</p>
-							</div>
-
-							<div class="card col-md-2">
-								<p>가격</p>
-							</div>
-
-							<div class="card col-md-1 small text-mute" style="display: flex; justify-content: center; align-items: center;">
-								<a href="찜"><img alt="" src="${pageContext.request.contextPath}/resources/assets/heart.png"></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-
-				<div class="card mb-2">
-					<div class="card-body">
-						<div class="row">
-							<div class="card col-md-1">
-								<p>로고</p>
-							</div>
-
-							<div class="card col-md-8">
-								<p>정액권 설명</p>
-							</div>
-
-							<div class="card col-md-2">
-								<p>가격</p>
-							</div>
-
-							<div class="card col-md-1 small text-mute" style="display: flex; justify-content: center; align-items: center;">
-								<a href="찜"><img alt="" src="${pageContext.request.contextPath}/resources/assets/heart.png"></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-				<div class="card mb-2">
-					<div class="card-body">
-						<div class="row">
-							<div class="card col-md-1">
-								<p>로고</p>
-							</div>
-
-							<div class="card col-md-8">
-								<p>정액권 설명</p>
-							</div>
-
-							<div class="card col-md-2">
-								<p>가격</p>
-							</div>
-
-							<div class="card col-md-1 small text-mute" style="display: flex; justify-content: center; align-items: center;">
-								<a href="찜"><img alt="" src="${pageContext.request.contextPath}/resources/assets/heart.png"></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="card mb-2">
-					<div class="card-body">
-						<div class="row">
-							<div class="card col-md-1">
-								<p>로고</p>
-							</div>
-
-							<div class="card col-md-8">
-								<p>정액권 설명</p>
-							</div>
-
-							<div class="card col-md-2">
-								<p>가격</p>
-							</div>
-
-							<div class="card col-md-1 small text-mute" style="display: flex; justify-content: center; align-items: center;">
-								<a href="찜"><img alt="" src="${pageContext.request.contextPath}/resources/assets/heart.png"></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-				<div class="card mb-2">
-					<div class="card-body">
-						<div class="row">
-							<div class="card col-md-1">
-								<p>로고</p>
-							</div>
-
-							<div class="card col-md-8">
-								<p>정액권 설명</p>
-							</div>
-
-							<div class="card col-md-2">
-								<p>가격</p>
-							</div>
-
-							<div class="card col-md-1 small text-mute" style="display: flex; justify-content: center; align-items: center;">
-								<a href="찜"><img alt="" src="${pageContext.request.contextPath}/resources/assets/heart.png"></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
+		<div class="row text-center">
+			<div class="col-lg-9">
+			
+			
+<c:forEach items="${PriceList}" var="priceList">
+    <div class="mb-2">
+        <div class="row VOIXBODERLINE" style="border-radius: 10px;">
+            <div class="card col-md-4 justify-content-center ${priceList.page}" style="height: 220px;">
+                <c:choose>
+                    <c:when test="${priceList.page eq 'Melon'}">
+                        <a href="https://www.melon.com/buy/pamphlet/all.htm"><img alt="" src="${priceList.pageimg}" class="w-100 ${priceList.page}"></a>
+                    </c:when>
+                    <c:when test="${priceList.page eq 'Bugs'}">
+                        <a href="https://music.bugs.co.kr/pay/public"><img alt="" src="${priceList.pageimg}" class="w-100 ${priceList.page}"></a>
+                    </c:when>
+                    <c:when test="${priceList.page eq 'Genie'}">
+                        <a href="https://pay.genie.co.kr/buy/thirtyDays"><img alt="" src="${priceList.pageimg}" class="w-100 ${priceList.page}"></a>
+                    </c:when>
+                    <c:when test="${priceList.page eq 'Vibe'}">
+                        <a href="https://vibe.naver.com/membership/vibe"><img alt="" src="${priceList.pageimg}" class="w-100 ${priceList.page}"></a>
+                    </c:when>
+                </c:choose>
+            </div>
+            <div class="card col-md-8 justify-content-center" style="background: #fafafa;">
+                <h2>${priceList.pricename}</h2>
+                <p style="font-size: 18px; margin-top: 3px;">${priceList.strprice}</p>
+            </div>
+        </div>
+    </div>
+</c:forEach>
 			</div>
 
 			<%@ include file="/WEB-INF/views/Includes/Side.jsp"%>

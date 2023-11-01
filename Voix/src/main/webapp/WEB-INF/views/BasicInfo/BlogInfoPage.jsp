@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,8 +6,7 @@
 
 <head>
 <meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="" />
 <meta name="author" content="" />
 <title>블로그상세페이지 - BlogInfoPage</title>
@@ -18,6 +16,30 @@
 <link href="resources/css/styles.css" rel="stylesheet" />
 
 <style type="text/css">
+.blogTitle {
+	font-size: 32px;
+	font-weight: bold;
+	letter-spacing: -0.08em;
+}
+.textdiv {
+	height: 100%;
+	max-height:150px;
+    background: #f8f9fa;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.textdiv::-webkit-scrollbar {
+  width: 10px;
+}
+
+.textdiv::-webkit-scrollbar-track {
+  background: #f8f9fa; /* Track color */
+}
+
+.textdiv::-webkit-scrollbar-thumb {
+  background-color: #888; /* Thumb color */
+  border-radius: 10px	; /* Rounded thumb */
+}
 </style>
 
 </head>
@@ -32,42 +54,57 @@
 	<!-- Page content-->
 	<div class="container">
 
-		<div class="newsTitle">
-			<h3>블로그제목</h3>
-		</div>
+		<div class="row">
 
-		<div>
-			<div style="display: flex;">
-
-				<img alt="블로그사진" src="">
-				<p>작성자, 작성일, 조회수</p>
-
-			</div>
-			<span>블로그내용</span>
-		</div>
-
-
-		<div>
-			<p>댓글 영역</p>
-		</div>
-
-
-
-		<!-- 				<div class="card mb-4">
-					<a href="#!"><img class="card-img-top"
-						src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg" alt="..." /></a>
-					<div class="card-body">
-						<div class="small text-muted">January 1, 2023</div>
-						<h2 class="card-title">Featured Post Title</h2>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur
-							adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex
-							quis soluta, a laboriosam. Dicta expedita corporis animi vero
-							voluptate voluptatibus possimus, veniam magni quis!</p>
-						<a class="btn btn-primary" href="#!">Read more →</a>
+			<div class="card col-md-12 mb-2">
+				<div class="blogTitle col-md-12 mb-2" style="margin-top: 10px;">
+					<h2>${bg.bgtitle}</h2>
+				</div>
+				<div class="row">
+					<img style="width: 350px; height: 200px; margin-top: 4px;" alt="블로그사진" src="${bg.bgimg }">
+					<div class="card col-md-8 my-md-2 mx-md-3 ">
+						<p>${bg.bgcontent }</p>
 					</div>
-				</div>  -->
+				</div>
+				<span style="font-size: 13px;">작성자: ${bg.bgwriter } // 작성일: ${bg.bgdate } // 조회수: ${bg.bgbighit }</span>
+			</div>
 
 
+			<c:if test="${sessionScope.loginId != null }">
+				<div class="reviewWrite">
+					<form action="BlogRegistReview" class="my-3" method="post">
+						<input type="text" name="restate" value="${bg.bgcode }" style="display: none">
+						<textarea class="w-100 reviewComment" name="recontent" placeholder="댓글을 작성해보세요."></textarea>
+						<input class="btn btn-success w-100" type="submit" value="댓글 등록">
+					</form>
+				</div>
+				<hr>
+			</c:if>
+
+			<div class="borderline" style="overflow: scroll; height: 500px; width: 100%;">
+				<div class="replyArea">
+					<div class="row my-3 scroll" style="width: 100%; margin-left: 5px; padding: 0px; display: inline-block; height: auto; max-height: 450px;">
+						<c:forEach items="${reviewList}" var="re">
+							<div class="meminfo">
+								<span>작성자: ${re.REWRITER} </span>
+								<div style="margin-top: 5px; margin-bottom: 5px;">
+									<!--
+									<textarea rows="" cols="" class="rvcomm scroll" disabled="disabled">${re.RECONTENT}</textarea>
+									-->	
+									<div class="textdiv w-100" style="font-size: large; border:1px solid #cccc;">${re.RECONTENT}</div>
+								</div>
+								<c:if test="${sessionScope.loginId == re.REWRITER}">
+									<button type="button" onclick="location.href='/deleteBlogReview?recode=${re.RECODE}&bgcode=${bg.bgcode}'" class="btn btn-danger" style="font-size: 14px; margin-bottom: 4px; width: 88px; height: 33px; float: right;">댓글 삭제</button>
+								</c:if>
+								<div class="small text-muted">작성시간: ${re.REDATE}</div>
+							</div>
+							<hr>
+						</c:forEach>
+					</div>
+				</div>
+			</div>
+
+		</div>
 	</div>
 
 
@@ -76,15 +113,13 @@
 	<!-- Footer-->
 	<footer class="py-5 bg-dark">
 		<div class="container">
-			<p class="m-0 text-center text-white">위 페이지의 출력되는 정보는 우측 상단에 있는
-				데이터 클롤링 및 페이지 양식을 인용하여 제작되었습니다.</p>
+			<p class="m-0 text-center text-white">위 페이지의 출력되는 정보는 우측 상단에 있는 데이터 클롤링 및 페이지 양식을 인용하여 제작되었습니다.</p>
 		</div>
 	</footer>
 
 
 	<!-- Bootstrap core JS-->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- Core theme JS-->
 	<script src="/resources/js/scripts.js"></script>
 

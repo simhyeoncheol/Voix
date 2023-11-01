@@ -8180,7 +8180,7 @@ textarea.form-control-lg {
 
 .bg-dark {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #5e504e !important;
 }
 
 .bg-black {
@@ -10843,3 +10843,10 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+  .VOIXBODERLINE{
+  	border: 3px solid #5e504e !important;
+  }
+  footer{
+  	background-color: #5e504e !important;
+  	color: #ede9e7 !important;
+  }
