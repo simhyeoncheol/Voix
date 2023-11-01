@@ -6,30 +6,86 @@
 
 <mapper namespace="com.Voix.Dao.NewsDao">
 	<select id="selectNews_map">
-		SELECT NWCODE, NWTITLE, NWCONTENT, NWIMG, NWBIGHIT, TO_CHAR(NWDATE,'YYYY-MM-DD') AS NWDATE  FROM NEWS ORDER BY NWDATE DESC
+		SELECT NWCODE, NWTITLE, NWCONTENT, NWIMG, NWBIGHIT, TO_CHAR(NWDATE,'YYYY-MM-DD') AS NWDATE FROM NEWS ORDER BY NWDATE DESC
 	</select>
-	
+
 	<select id="getNwInfo">
 		SELECT * FROM NEWS WHERE NWCODE = #{nwcode}
 	</select>
-	
+
 	<select id="selectMaxReCode">
 		SELECT NVL(MAX(RECODE), 'RE0000') FROM REVIEWS
 	</select>
-	
+
 	<insert id="newsRegistReview">
 		INSERT INTO REVIEWS(RECODE,REWRITER,RECONTENT,REDATE,RESTATE) VALUES(#{recode},#{rewriter},#{recontent},SYSDATE,#{restate})
 	</insert>
-	
+
 	<select id="selectReviewList" resultType="hashmap">
-		SELECT * FROM REVIEWS WHERE RESTATE = #{nwcode}
+		SELECT * FROM REVIEWS WHERE RESTATE = #{nwcode} ORDER BY REDATE DESC
 	</select>
-	
+
 	<delete id="deleteNewsReview">
 		DELETE FROM REVIEWS WHERE RECODE = #{recode}
 	</delete>
+
 	<insert id="likeNews">
-   		INSERT INTO LIKES (LIMID, LILIST)
-    	VALUES (#{mid}, #{like})
+		INSERT INTO LIKES (LIMID, LILIST)
+		VALUES (#{mid}, #{like})
 	</insert>
+
+	<select id="selectSearch_Title">
+		SELECT * FROM NEWS WHERE NWTITLE like '%${nwtitle}%'
+	</select>
+
+	<select id="selectSearch_Content">
+		SELECT * FROM NEWS WHERE NWCONTENT like '%${nwcontent}%'
+	</select>
+
+	<select id="selectNewsHitList">
+		SELECT NWTITLE,NWCODE
+		FROM NEWS
+		ORDER BY NWBIGHIT DESC
+	</select>
+
+	<select id="selectMaxNwCode" resultType="String">
+		SELECT NVL(MAX(NWCODE), 'N0000') FROM NEWS
+	</select>
+
+	<insert id="insertNews">
+		INSERT INTO NEWS VALUES(#{nwcode}, #{nwtitle}, #{nwcontent}, TO_DATE(#{nwdate}, 'YYYY-MM-DD HH24:MI:SS'), #{nwimg},'0')
+	</insert>
+
+	<select id="selectMainNews">
+		SELECT *
+		FROM (SELECT NWCODE AS code, NWTITLE AS title , NWCONTENT AS content , NWIMG AS img , NWDATE AS dat2
+		FROM NEWS
+		ORDER BY NWDATE DESC)
+		WHERE ROWNUM = 1
+	</select>
+	<update id="UpdateNewsBigHit">
+	UPDATE NEWS
+	SET NWBIGHIT = NWBIGHIT+'1'
+	WHERE NWCODE = #{nwcode}
+	</update>
+
+	<select id="getLikedNewsList" resultType="String">
+   	 SELECT LILIST FROM LIKES WHERE LIMID = #{mid}
+	</select>
+	
+	<delete id="unlikeNews">
+	DELETE FROM LIKES
+	WHERE LIMID = #{mid}
+	AND LILIST = #{like}
+	</delete>	
+
+	<select id="countBoard" resultType="int">
+	SELECT COUNT(*) FROM NEWS
+	</select>
+
+	<select id="selectBoardList" resultType="hashmap" parameterType="hashmap">
+    	SELECT * FROM NEWS
+	WHERE NWCODE BETWEEN #{pageStart} AND #{perPageNum}
+	ORDER BY NWCODE DESC
+	</select>
 </mapper>

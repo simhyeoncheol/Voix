@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Voix.Dao.BlogDao">
+	<select id="selectMainBlog">
+		SELECT *
+		FROM (SELECT BGCODE AS code, BGTITLE AS title , BGCONTENT AS content , BGIMG AS img , BGDATE AS dat2
+		FROM BLOGS
+		ORDER BY BGDATE DESC)
+		WHERE ROWNUM = 1
+	</select>
+
+	<select id="selectBlog_map">
+		SELECT BGCODE, BGTITLE, BGCONTENT, BGWRITER, BGIMG, BGBIGHIT, TO_CHAR(BGDATE,'YYYY-MM-DD') AS BGDATE FROM BLOGS ORDER BY BGDATE DESC
+	</select>
+
+	<select id="getBlogInfo">
+		SELECT * FROM BLOGS WHERE BGCODE = #{bgcode}
+	</select>
+
+	<select id="selectReviewList" resultType="hashmap">
+		SELECT * FROM REVIEWS WHERE RESTATE = #{bgcode} ORDER BY REDATE DESC
+	</select>
+
+	<select id="selectMaxReCode">
+		SELECT NVL(MAX(RECODE), 'RE0000') FROM REVIEWS
+	</select>
+
+	<insert id="BlogRegistReview">
+		INSERT INTO REVIEWS(RECODE,REWRITER,RECONTENT,REDATE,RESTATE) VALUES(#{recode},#{rewriter},#{recontent},SYSDATE,#{restate})
+	</insert>
+
+	<delete id="deleteBlogReview">
+		DELETE FROM REVIEWS WHERE RECODE = #{recode}
+	</delete>
+
+	<insert id="likeBlog">
+		INSERT INTO LIKES (LIMID, LILIST)
+		VALUES (#{mid}, #{like})
+	</insert>
+
+	<select id="selectBlogHitList">
+		SELECT BGTITLE,BGCODE
+		FROM BLOGS
+		ORDER BY BGBIGHIT DESC
+	</select>
+	<update id="UpdateBlogBigHit">
+		UPDATE BLOGS
+		SET BGBIGHIT = BGBIGHIT+'1'
+		WHERE BGCODE = #{bgcode}
+	</update>
+
+	<select id="getLikedBlogList" resultType="String">
+		SELECT LILIST FROM LIKES WHERE LIMID = #{mid}
+	</select>
+
+	<delete id="unlikeBlog">
+		DELETE FROM LIKES
+		WHERE LIMID = #{mid}
+		AND LILIST = #{like}
+	</delete>
+	<select id="countBoard" resultType="int">
+		SELECT COUNT(*) FROM BLOGS
+	</select>
+
+	<select id="selectBoardList" resultType="hashmap" parameterType="hashmap">
+		SELECT * FROM BLOGS
+		WHERE BGCODE BETWEEN #{pageStart} AND #{perPageNum}
+		ORDER BY BGDATE DESC
+	</select>
+
+	<select id="selectSearch_Title">
+		SELECT * FROM BLOGS WHERE BGTITLE like '%${bgtitle}%'
+	</select>
+
+	<select id="selectSearch_Content">
+		SELECT * FROM BLOGS WHERE BGCONTENT like '%${bgcontent}%'
+	</select>
+</mapper>
